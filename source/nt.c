@@ -55,16 +55,6 @@ NTSTATUS NtCreateSemaphore(PHANDLE SemaphoreHandle, ULONG DesiredAccess, POBJECT
                 return STATUS_NOT_IMPLEMENTED;
         }
 
-        if (InitialCount > MaximumCount) {
-                errno = EINVAL;
-                return STATUS_INVALID_PARAMETER_4;
-        }
-
-        if (MaximumCount == 0) {
-                errno = EINVAL;
-                return STATUS_INVALID_PARAMETER_5;
-        }
-
         struct ntsync_sem_args args = {.count = InitialCount, .max = MaximumCount};
         int ret = ioctl(ntsync, NTSYNC_IOC_CREATE_SEM, &args);
         if (ret == -1) {
@@ -79,11 +69,6 @@ NTSTATUS NtCreateSemaphore(PHANDLE SemaphoreHandle, ULONG DesiredAccess, POBJECT
 
 NTSTATUS NtReleaseSemaphore(HANDLE SemaphoreHandle, LONG ReleaseCount, PLONG PreviousCount)
 {
-        if (ReleaseCount == 0) {
-                errno = EINVAL;
-                return STATUS_INVALID_PARAMETER_2;
-        }
-
         if (!(SemaphoreHandle.DesiredAccess & SEMAPHORE_MODIFY_STATE)) {
                 errno = EPERM;
                 return STATUS_ACCESS_DENIED;
