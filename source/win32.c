@@ -5,6 +5,11 @@
  * SPDX-License-Identifier: MIT
  */
 
+/* Changelog
+ * 28/10/2025 GMT +7 06.24
+ * Overflow Semaphore should return ERROR_TOO_MANY_POSTS now
+ */
+
 #include "win32.h"
 #include <fcntl.h>
 #include <unistd.h>
