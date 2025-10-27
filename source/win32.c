@@ -53,7 +53,7 @@ DWORD GetLastError(void)
                         return ERROR_TIMEOUT;
                         break;
                 case EOVERFLOW:
-                        return ERROR_ARITHMETIC_OVERFLOW;
+                        return ERROR_TOO_MANY_POSTS;
                         break;
                 case EPERM:
                         return ERROR_ACCESS_DENIED;
