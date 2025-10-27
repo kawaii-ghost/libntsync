@@ -5,6 +5,12 @@
  * SPDX-License-Identifier: MIT
  */
 
+/* Changelog
+ * 28/10/2025 GMT +0 23.17
+ * - Fix wrong event type returned from NtQueryEvent
+ * - NtReleaseSemaphore now will return STATUS_SEMAPHORE_LIMIT_EXCEEDED if ioctl return EOVERFLOW
+ */
+
 #include "nt.h"
 #include <errno.h>
 #include <sys/ioctl.h>
@@ -29,7 +35,7 @@ NTSTATUS RtlpGetNtStatusFromUnixErrno(void)
                         return STATUS_TIMEOUT;
                         break;
                 case EOVERFLOW:
-                        return STATUS_INTEGER_OVERFLOW;
+                        return STATUS_SEMAPHORE_LIMIT_EXCEEDED;
                         break;
                 case EPERM:
                         return STATUS_ACCESS_DENIED;
@@ -234,7 +240,7 @@ NTSTATUS NtQueryEvent(HANDLE EventHandle, EVENT_INFORMATION_CLASS EventInformati
         }
 
         ((EVENT_BASIC_INFORMATION *)EventInformation)->EventState = args.signaled;
-        ((EVENT_BASIC_INFORMATION *)EventInformation)->EventType = args.manual;
+        ((EVENT_BASIC_INFORMATION *)EventInformation)->EventType = args.manual ? NotificationEvent : SynchronizationEvent;
         
         if (ReturnLength != NULL) {
                 *ReturnLength = sizeof(EVENT_BASIC_INFORMATION);
@@ -270,7 +276,7 @@ NTSTATUS NtWaitForSingleObject(HANDLE Handle, BOOLEAN Alertable, PLARGE_INTEGER 
                 }
                 args.timeout = -(TimeOut->QuadPart) * 100 + ts.tv_nsec + ts.tv_sec * NSEC_PER_SEC;
         }
-
+        
         int ret = ioctl(ntsync, NTSYNC_IOC_WAIT_ANY, &args);
         if (ret == -1) {
                 return RtlpGetNtStatusFromUnixErrno();
