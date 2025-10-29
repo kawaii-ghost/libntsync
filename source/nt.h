@@ -4,7 +4,10 @@
  * Copyright (c) 2025 Kawaii Ghost. All Rights Reserved.
  * SPDX-License-Identifier: MIT
  */
-
+/* Changelog
+ * 30/10/2025 GMT +7 05.54
+ * Define STATUS_SEMAPHORE_LIMIT_EXCEEDED
+ */
 #pragma once
 
 #include <stdint.h>
@@ -178,6 +181,7 @@ typedef struct _SEMAPHORE_BASIC_INFORMATION
 #define STATUS_INTEGER_OVERFLOW 0xC0000095
 #define STATUS_UNSUCCESSFUL 0xc0000001
 #define STATUS_NOT_IMPLEMENTED 0xC0000002L
+#define STATUS_SEMAPHORE_LIMIT_EXCEEDED 0xc0000047
 
 #define SYNCHRONIZE 0x00100000L
 #define DELETE 0x00010000L
