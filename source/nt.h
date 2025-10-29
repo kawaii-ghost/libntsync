@@ -4,6 +4,7 @@
  * Copyright (c) 2025 Kawaii Ghost. All Rights Reserved.
  * SPDX-License-Identifier: MIT
  */
+
 /* Changelog
  * 30/10/2025 GMT +7 05.54
  * Define STATUS_SEMAPHORE_LIMIT_EXCEEDED
